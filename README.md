@@ -1,75 +1,31 @@
-# React + TypeScript + Vite
+# Aplicación Gestión Fitness – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+PWA para la gestión de Personal Trainers y sus alumnos, desarrollada con React, TypeScript y Vite.
 
-Currently, two official plugins are available:
+## Requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js 20.19 o superior
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Instalación
 
 ```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+npm install
 ```
+
+## Comandos
+
+| Comando | Para qué sirve |
+|---|---|
+| `npm run dev` | Levanta la app en modo desarrollo en `http://localhost:5173` |
+| `npm test` | Corre las pruebas con Vitest y queda vigilando cambios |
+| `npx vitest run` | Corre las pruebas una sola vez |
+| `npm run build` | Genera la versión de producción en `dist/`, con el service worker de la PWA |
+| `npm run preview` | Sirve la versión de producción en `http://localhost:4173` para probar la instalación como PWA |
+
+## Estructura
+
+El código se organiza por funcionalidad (ver DT-04 en el repositorio del backend):
+
+- `src/app/`: componente principal y rutas.
+- `src/features/`: una carpeta por funcionalidad (auth, home, students, routines, schedule, payments).
+- `src/shared/`: código compartido: cliente de la API, componentes comunes y estilos.
