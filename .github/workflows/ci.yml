@@ -20,13 +20,13 @@ jobs:
           cache: npm
 
       - name: Instalar dependencias
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Revisar el código (lint)
         run: npm run lint
 
       - name: Ejecutar las pruebas
-        run: npx vitest run
+        run: npm test
 
       - name: Compilar
         run: npm run build
