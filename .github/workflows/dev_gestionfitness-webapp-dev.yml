@@ -35,7 +35,7 @@ jobs:
         run: npm run lint
 
       - name: Ejecutar las pruebas
-        run: npx vitest run
+        run: npm test
 
       - name: Compilar
         run: npm run build
