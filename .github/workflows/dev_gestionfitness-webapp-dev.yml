@@ -1,65 +1,80 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
+# Despliega el frontend (React + Vite, PWA) en Azure App Service (Linux, Node).
+# Docs: https://github.com/Azure/webapps-deploy
 
-name: Build and deploy Node.js app to Azure Web App - GestionFitness-WebApp-Dev
+name: Deploy frontend a Azure - GestionFitness-WebApp-Dev
 
 on:
   push:
     branches:
-      - 'dev'
+      - dev
   workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: GestionFitness-WebApp-Dev
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Descargar el código
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js version
-        uses: actions/setup-node@v3
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '26.x'
+          node-version: 22
+          cache: npm
 
-      - name: npm install, build, and test
-        run: |
-          npm install
-          npm run build --if-present
-          npm run test --if-present
+      - name: Instalar dependencias
+        run: npm ci --ignore-scripts
 
-      - name: Upload artifact for deployment job
+      - name: Revisar el código (lint)
+        run: npm run lint
+
+      - name: Ejecutar las pruebas
+        run: npx vitest run
+
+      - name: Compilar
+        run: npm run build
+
+      # Solo se publica la carpeta dist (archivos estáticos), no el repo ni node_modules
+      - name: Subir el build
         uses: actions/upload-artifact@v4
         with:
-          name: node-app
-          path: .
+          name: frontend-dist
+          path: dist
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write # Necesario para el login con OIDC
+      contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Descargar el build
         uses: actions/download-artifact@v4
         with:
-          name: node-app
-      
-      - name: Login to Azure
+          name: frontend-dist
+          path: dist
+
+      - name: Login en Azure
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_BB7EA2FE352249A3A3487BD40286B8EF }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0BF07C60ECAC417090162615346ACBB0 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_3616114ED7554BA9BE0133A66B328454 }}
 
-      - name: 'Deploy to Azure Web App'
+      # Requisito (configurado una sola vez en el portal de Azure):
+      # App Service → Configuración → Configuración de la pila → Comando de inicio:
+      #   pm2 serve /home/site/wwwroot --no-daemon --spa
+      - name: Desplegar en Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'GestionFitness-WebApp-Dev'
-          slot-name: 'Production'
-          package: .
-          
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          slot-name: Production
+          package: dist
