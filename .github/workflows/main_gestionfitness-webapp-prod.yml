@@ -56,7 +56,7 @@ jobs:
           name: node-app
       
       - name: Login to Azure
-        uses: azure/login@v2
+        uses: azure/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2.3.1
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_2CA1411EB0844FFF9DDEA7AB1ECF2496 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2C66F03B50804009871437A16C21123B }}
@@ -64,7 +64,7 @@ jobs:
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3.0.8
         with:
           app-name: 'GestionFitness-WebApp-Prod'
           slot-name: 'Production'

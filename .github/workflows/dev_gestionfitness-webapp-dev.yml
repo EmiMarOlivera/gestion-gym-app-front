@@ -62,7 +62,7 @@ jobs:
           path: dist
 
       - name: Login en Azure
-        uses: azure/login@v2
+        uses: azure/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2.3.1
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_BB7EA2FE352249A3A3487BD40286B8EF }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0BF07C60ECAC417090162615346ACBB0 }}
@@ -73,7 +73,7 @@ jobs:
       #   pm2 serve /home/site/wwwroot --no-daemon --spa
       - name: Desplegar en Azure Web App
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3.0.8
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           slot-name: Production
